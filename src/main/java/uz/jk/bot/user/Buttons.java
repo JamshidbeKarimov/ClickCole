@@ -2,10 +2,12 @@ package uz.jk.bot.user;
 
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardRemove;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardButton;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 import uz.jk.model.Card;
+import uz.jk.model.CardType;
 import uz.jk.repository.card.CardRepository;
 import uz.jk.repository.card.CardRepositoryImpl;
 
@@ -64,6 +66,28 @@ public class Buttons {
         return replyKeyboardMarkup;
     }
 
+    public ReplyKeyboardMarkup cardMenu() {
+        ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup();
+        replyKeyboardMarkup.setResizeKeyboard(true);
+        List<KeyboardRow> rows = new ArrayList<>();
+        KeyboardRow keyboardRow = new KeyboardRow();
+
+        keyboardRow.add("➕ Add card");
+        keyboardRow.add("My Cards");
+        rows.add(keyboardRow);
+
+        keyboardRow = new KeyboardRow();
+        keyboardRow.add("⬅️Back");
+        rows.add(keyboardRow);
+
+        replyKeyboardMarkup.setKeyboard(rows);
+        return replyKeyboardMarkup;
+    }
+
+    public ReplyKeyboardRemove remove() {
+        return new ReplyKeyboardRemove(true);
+    }
+
 
     public InlineKeyboardMarkup cards(List<Card> cards) {
         InlineKeyboardMarkup buttons = new InlineKeyboardMarkup();
@@ -90,6 +114,32 @@ public class Buttons {
         InlineKeyboardButton button = new InlineKeyboardButton("➕ ADD CARD_MENU");
         button.setCallbackData("add_card");
         rows.add(List.of(button));
+
+        buttons.setKeyboard(rows);
+        return buttons;
+    }
+
+    public InlineKeyboardMarkup cardTypes() {
+        InlineKeyboardMarkup buttons = new InlineKeyboardMarkup();
+        List<List<InlineKeyboardButton>> rows = new ArrayList<>();
+        List<InlineKeyboardButton> row = new ArrayList<>();
+
+        int i = 1;
+        for (CardType type: CardType.values()) {
+            InlineKeyboardButton button = new InlineKeyboardButton(type.name());
+            button.setCallbackData("Add_" + type.name());
+            row.add(button);
+
+            if (i % 2 == 0) {
+                rows.add(row);
+                row = new ArrayList<>();
+            }
+            i++;
+        }
+
+        if (!row.isEmpty()) {
+            rows.add(row);
+        }
 
         buttons.setKeyboard(rows);
         return buttons;

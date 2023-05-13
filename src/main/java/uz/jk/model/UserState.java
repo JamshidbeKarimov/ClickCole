@@ -3,7 +3,7 @@ package uz.jk.model;
 public enum UserState {
     START, // ASK FOR CONTACT
     SHARED_CONTACT, //AS FOR LOCATION
-    REGISTERED, // SHOW MAIN MENU
+    REGISTERED, MAIN_MENU, // SHOW MAIN MENU
 
     // menus
 
@@ -11,5 +11,14 @@ public enum UserState {
     P2P, //
     PAYMENT,
     HISTORY,
+
+    // card menu
+    ADD_CARD,
+    MY_CARDS,
+
+    // card types
+    HUMO,
+    VISA,
+    UZ_CARD;
 
 }

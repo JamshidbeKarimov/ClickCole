@@ -28,15 +28,15 @@ public class Main {
 ////        userRepository.save(user);
 //        userRepository.update(user);
 
-        CardRepository cardRepository = new CardRepositoryImpl();
-        cardRepository.save(
-                Card.builder()
-                        .balance(100D)
-                        .expiry(LocalDate.of(2027, 03, 04))
-                        .number("1234")
-                        .type(CardType.HUMO)
-                        .ownerId(UUID.fromString("5906e66d-66d8-4309-9663-957680ee1541"))
-                        .build());
+//        CardRepository cardRepository = new CardRepositoryImpl();
+//        cardRepository.save(
+//                Card.builder()
+//                        .balance(100D)
+//                        .expiry(LocalDate.of(2027, 03, 04))
+//                        .number("1234")
+//                        .type(CardType.HUMO)
+//                        .ownerId(UUID.fromString("5906e66d-66d8-4309-9663-957680ee1541"))
+//                        .build());
 
 
         try {

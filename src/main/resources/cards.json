@@ -23,19 +23,19 @@
   "isActive" : null,
   "createdDate" : "13-05-2023 11:21:46",
   "updatedDate" : "13-05-2023 11:21:46",
-  "number" : "1234",
+  "number" : "1235",
   "balance" : 100.0,
   "ownerId" : "5906e66d-66d8-4309-9663-957680ee1541",
   "expiry" : "04-03-2027",
   "type" : "HUMO"
 }, {
-  "id" : "3957a95d-0829-4efd-a63c-12b42cda6b58",
+  "id" : "1b1d5218-80cf-4242-84ba-7445f7dbeb86",
   "isActive" : null,
-  "createdDate" : "13-05-2023 11:21:46",
-  "updatedDate" : "13-05-2023 11:21:46",
+  "createdDate" : "13-05-2023 12:16:14",
+  "updatedDate" : "13-05-2023 12:16:14",
   "number" : "1234",
-  "balance" : 100.0,
+  "balance" : 1000.0,
   "ownerId" : "5906e66d-66d8-4309-9663-957680ee1541",
-  "expiry" : "04-03-2027",
-  "type" : "HUMO"
+  "expiry" : null,
+  "type" : "UZ_CARD"
 } ]

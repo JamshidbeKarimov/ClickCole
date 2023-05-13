@@ -2,12 +2,13 @@ package uz.jk.bot.user;
 
 import lombok.SneakyThrows;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
-import org.telegram.telegrambots.meta.api.objects.Contact;
-import org.telegram.telegrambots.meta.api.objects.Location;
-import org.telegram.telegrambots.meta.api.objects.Message;
-import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.api.objects.*;
+import uz.jk.model.Card;
+import uz.jk.model.CardType;
 import uz.jk.model.User;
 import uz.jk.model.UserState;
+import uz.jk.repository.card.CardRepository;
+import uz.jk.repository.card.CardRepositoryImpl;
 import uz.jk.repository.user.UserRepository;
 import uz.jk.repository.user.UserRepositoryImpl;
 
@@ -15,6 +16,8 @@ import java.util.Optional;
 
 public class ClickUserBot extends TelegramLongPollingBot {
     private final UserRepository userRepository = new UserRepositoryImpl();
+    private final CardRepository cardRepository = new CardRepositoryImpl();
+
     private final UserBotService userBotService = new UserBotService();
     @SneakyThrows
     @Override
@@ -29,6 +32,7 @@ public class ClickUserBot extends TelegramLongPollingBot {
             UserState userState;
 
             if(currentUserOptional.isPresent()) {
+
                 User currentUser = currentUserOptional.get();
                 userState = currentUser.getState();
                 switch (userState) {
@@ -49,8 +53,31 @@ public class ClickUserBot extends TelegramLongPollingBot {
                             userRepository.updateState(chatId, UserState.CARD_MENU);
                         }
                     }
+                    case CARD_MENU -> {
+                        if(text.equals("➕ Add card")) {
+                            userState = UserState.ADD_CARD;
+                            userRepository.updateState(chatId, UserState.ADD_CARD);
+                        } else if(text.equals("⬅️Back")) {
+                            userState = UserState.REGISTERED;
+                            userRepository.updateState(chatId, UserState.REGISTERED);
+                        }
+                    }
+                    case HUMO, UZ_CARD, VISA -> {
+                        if(userBotService.validateCardNumber(text)) {
+                            Card card = Card.builder()
+                                    .number(text)
+                                    .type(CardType.valueOf(userState.name()))
+                                    .balance(1000D)
+                                    .ownerId(currentUser.getId())
+                                    .build();
+                            cardRepository.save(card);
+                            userRepository.updateState(chatId, UserState.CARD_MENU);
+                            userState = UserState.CARD_MENU;
+                        }
+                    }
                 }
-            } else {
+            } 
+            else {
                 if(message.hasContact()) {
                     Contact contact = message.getContact();
                     User user = User.builder()
@@ -78,10 +105,33 @@ public class ClickUserBot extends TelegramLongPollingBot {
                     execute(userBotService.showMainMenu(chatId.toString()));
                 }
                 case CARD_MENU -> {
-                    execute(userBotService.userCards(chatId.toString(), currentUserOptional.get().getId()));
+                    execute(userBotService.userCards(chatId.toString()));
+                }
+                case ADD_CARD -> {
+                    execute(userBotService.askCardType(chatId.toString()));
+                }
+                case HUMO, UZ_CARD, VISA -> {
+                    execute(userBotService.enterValidCardNumber(chatId.toString()));
                 }
             }
 
+        }
+        else if(update.hasCallbackQuery()) {
+            CallbackQuery callbackQuery = update.getCallbackQuery();
+            String data = callbackQuery.getData();
+            Message message = callbackQuery.getMessage();
+            Long chatId = message.getChatId();
+            User currentUser = userRepository.findByChatId(chatId).get();
+
+            UserState userState = currentUser.getState();
+
+            switch (userState) {
+                case ADD_CARD -> {
+                    execute(userBotService.deleteMessage(chatId.toString(), message.getMessageId()));
+                    execute(userBotService.askCardNumber(chatId.toString()));
+                    userRepository.updateState(chatId, userBotService.extractCardType(data));
+                }
+            }
         }
 
     }
