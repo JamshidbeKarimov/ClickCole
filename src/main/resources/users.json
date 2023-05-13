@@ -1,0 +1,14 @@
+[ {
+  "id" : "5906e66d-66d8-4309-9663-957680ee1541",
+  "isActive" : null,
+  "createdDate" : "13-05-2023 11:18:46",
+  "updatedDate" : "13-05-2023 11:18:46",
+  "chatId" : 5180427425,
+  "firstname" : "Jamshidbek Karimov",
+  "phoneNumber" : "+998940748463",
+  "state" : "CARD_MENU",
+  "location" : {
+    "latitude" : 41.320193,
+    "longitude" : 41.320193
+  }
+} ]
