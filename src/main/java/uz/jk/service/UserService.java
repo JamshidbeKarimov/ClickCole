@@ -14,4 +14,10 @@ public class UserService {
                 new RuntimeException("user not found")
         );
     }
+
+    public User findByChatId(Long chatId) {
+        return userRepository.findByChatId(chatId).orElseThrow(() ->
+                new RuntimeException("user not found")
+        );
+    }
 }
