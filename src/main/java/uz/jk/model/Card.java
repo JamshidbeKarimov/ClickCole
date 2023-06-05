@@ -31,6 +31,6 @@ public class Card extends BaseModel{
     private CardType type;
     
     {
-        System.out.print("i'm a change");
+        System.out.print("i'm another change change");
     }
 }
