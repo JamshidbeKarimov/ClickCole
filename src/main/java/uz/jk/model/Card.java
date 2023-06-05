@@ -29,4 +29,8 @@ public class Card extends BaseModel{
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
     private LocalDate expiry;
     private CardType type;
+    
+    {
+        System.out.print("i'm another change change");
+    }
 }
